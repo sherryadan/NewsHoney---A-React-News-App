@@ -9,7 +9,7 @@ export class Navbar extends Component {
       <div>
         <nav
           className="navbar navbar-expand-lg"
-          style={{ backgroundColor: "#e08b9c" }}
+          style={{ backgroundColor: "#bdbcbb" }}
         >
           <div className="container-fluid">
             <a className="navbar-brand" href="/">
