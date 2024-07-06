@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import NewsItem from "./NewsItem";
+import Spinner from "./Spinner";
 
 export class News extends Component {
   constructor() {
@@ -13,18 +14,20 @@ export class News extends Component {
   }
 
   handlePreviousClick = async () => {
-    let url = 'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4b2932bc9bde461ba5bbc592d155dfe0&page=' + this.state.page - 1;
+    let url = 'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4b2932bc9bde461ba5bbc592d155dfe0&page=' + this.state.page - 1 ;
     let data = await fetch(url);
+    this.setState({ loading: true });
     let parsedData = await data.json()
-    this.setState({ articles: parsedData.articles });
+    this.setState({ articles: parsedData.articles, loading: false });
     this.setState({ page: this.state.page - 1 })
   }
 
   async componentDidMount() {
     let url = "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4b2932bc9bde461ba5bbc592d155dfe0&page=1";
     let data = await fetch(url);
+    this.setState({ loading: true });
     let parsedData = await data.json()
-    this.setState({ articles: parsedData.articles });
+    this.setState({ articles: parsedData.articles, loading: false });
     console.log(parsedData);
   
   }
@@ -38,8 +41,9 @@ export class News extends Component {
 
     let url = "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4b2932bc9bde461ba5bbc592d155dfe0&page=" + this.state.page + 1;
     let data = await fetch(url);
+    this.setState({ loading: true });
     let parsedData = await data.json()
-    this.setState({ articles: parsedData.articles });
+    this.setState({ articles: parsedData.articles, loading: false });
     this.setState({ page: this.state.page + 1 })
     
   }
@@ -53,6 +57,7 @@ export class News extends Component {
     return (
       <div className="container my-3">
         <h2 className="text-center">News Honey Top Headlines</h2>
+        {this.state.loading && <Spinner/>}
         <div className="row">
           {this.state.articles.map((element) => {
             if (!element) {
