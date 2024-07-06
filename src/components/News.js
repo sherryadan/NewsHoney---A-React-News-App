@@ -12,6 +12,14 @@ export class News extends Component {
     };
   }
 
+  handlePreviousClick = async () => {
+    let url = 'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4b2932bc9bde461ba5bbc592d155dfe0&page=' + this.state.page - 1;
+    let data = await fetch(url);
+    let parsedData = await data.json()
+    this.setState({ articles: parsedData.articles });
+    this.setState({ page: this.state.page - 1 })
+  }
+
   async componentDidMount() {
     let url = "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4b2932bc9bde461ba5bbc592d155dfe0&page=1";
     let data = await fetch(url);
@@ -23,6 +31,11 @@ export class News extends Component {
 
   handleNextClick = async () => {
 
+    if (this.state.page + 1 > Math.ceil(this.state.totalResults / 20)) {
+      this.setState({ page: this.state.page });
+    }
+    else {
+
     let url = "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4b2932bc9bde461ba5bbc592d155dfe0&page=" + this.state.page + 1;
     let data = await fetch(url);
     let parsedData = await data.json()
@@ -30,13 +43,7 @@ export class News extends Component {
     this.setState({ page: this.state.page + 1 })
     
   }
-  handlePreviousClick = async () => {
-    let url = 'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4b2932bc9bde461ba5bbc592d155dfe0&page=' + this.state.page - 1;
-    let data = await fetch(url);
-    let parsedData = await data.json()
-    this.setState({ articles: parsedData.articles });
-    this.setState({ page: this.state.page - 1 })
-  }
+}
 
   render() {
     if (!this.state.articles) {
@@ -45,7 +52,7 @@ export class News extends Component {
 
     return (
       <div className="container my-3">
-        <h2>News Honey Top Headlines</h2>
+        <h2 className="text-center">News Honey Top Headlines</h2>
         <div className="row">
           {this.state.articles.map((element) => {
             if (!element) {
@@ -67,7 +74,7 @@ export class News extends Component {
         <button disabled={this.state.page <= 1} type="button" className="btn btn-secondary mx-2" onClick={this.handlePreviousClick}>
           &larr; Previous
         </button>
-        <button type="button" className="btn btn-secondary mx-2" onClick={this.handleNextClick}>
+        <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / 20)} type="button" className="btn btn-secondary mx-2" onClick={this.handleNextClick}>
           Next &rarr;
         </button>
         </div>
