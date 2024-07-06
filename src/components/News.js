@@ -23,7 +23,7 @@ export class News extends Component {
 
   handleNextClick = async () => {
 
-    let url = 'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4b2932bc9bde461ba5bbc592d155dfe0&page=' + this.state.page + 1;
+    let url = "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4b2932bc9bde461ba5bbc592d155dfe0&page=" + this.state.page + 1;
     let data = await fetch(url);
     let parsedData = await data.json()
     this.setState({ articles: parsedData.articles });
@@ -39,11 +39,18 @@ export class News extends Component {
   }
 
   render() {
+    if (!this.state.articles) {
+      return null;
+    }
+
     return (
       <div className="container my-3">
         <h2>News Honey Top Headlines</h2>
         <div className="row">
           {this.state.articles.map((element) => {
+            if (!element) {
+              return null;
+            }
             return (
               <div className="col md-4 my-4" key={element.url}>
                 <NewsItem
@@ -57,9 +64,12 @@ export class News extends Component {
           })}
         </div>
         <div className="container d-flex justify-content-between">
-        <button disabled={this.state.page<=1} type="button" className="btn btn-secondary mx-2" onClick={this.handlePreviousClick}>&larr; Previous</button>
-        <button type="button" className="btn btn-secondary mx-2" onClick={this.handleNextClick}>Next &rarr;</button>
-
+        <button disabled={this.state.page <= 1} type="button" className="btn btn-secondary mx-2" onClick={this.handlePreviousClick}>
+          &larr; Previous
+        </button>
+        <button type="button" className="btn btn-secondary mx-2" onClick={this.handleNextClick}>
+          Next &rarr;
+        </button>
         </div>
       </div>
     );
